@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}User Profile{% endblock %}
+{% block content %}
+
+<div class="container">
+    <br><br>
+<h1>User Profile</h1>
+<br>
+
+
+<div class="card mb-3">
+    <div class="row g-0">
+    <div class="col-md-2">
+        {% if page_user.profile_pic %}
+        <img src="{{page_user.profile_pic.url}}" width="150" height="150">
+        {% else %}
+        <img src="{% static 'blog/images/avatar.png' %}" width="150" height="150">
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <div class="card-body">
+        <h5 class="card-title">{{ page_user.user.first_name}} {{ page_user.user.last_name}}</h5>
+        <p class="card-text"><small class="small text-muted">Author</small></p>
+        <p class="card-text">{{page_user.bio}}</p>
+        
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Categories{% endblock %}
+{% block content %}
+<div class="container">
+    <br>
+{% if category_post%}
+
+<h1>{{ cats }}</h1>
+
+{% for post in category_post%}
+
+<div class="row">
+    <div class="col-md-2"><a href="{% url 'blog:article-detail' post.pk %}"><img class="col-12" src="{{post.thumbnail.url}}"></a></div>
+    <div class="col-md-10">
+
+        <h2><a class="text-decoration-none" href="{% url 'blog:article-detail' post.pk %}">{{ post.title }}</a> </h2>
+        
+        <a class="badge alert-warning" href="{% url 'blog:category' post.category%}">{{post.category}}</a> 
+          {{ post.post_date}} 
+        
+        <br>
+        By: {{ post.author.first_name}} {{ post.author.last_name}}
+        <p style="text-align: justify;">{{ post.body | slice:":400" | safe  }}</p>
+        {% if user.is_authenticated %}
+            {% if user.id == post.author.id %}
+                <small><a href="{% url 'blog:update-post' post.pk %}" ><button type="button" class="btn btn-success btn-sm">Edit</button></a></small>
+                <small><a href="{% url 'blog:delete-post' post.pk %}" ><button type="button" class="btn btn-danger btn-sm">Delete</button></a></small>
+            {% endif %}       
+        {% endif %}
+
+
+    </div>
+  </div>
+
+  <br>
+{% endfor %}
+
+{% else %}
+<h2>Page doesn't exist</h2>
+{% endif %}
+
+</div>
+{% endblock %}

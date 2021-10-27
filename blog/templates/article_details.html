@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ post.title_tag }}{% endblock %}
+{% block content %}
+<div class="container">
+<br><br>
+<h1>{{ post.title }}</h1>
+
+<small>By: {{ post.author.first_name}} {{ post.author.last_name}} - {{ post.post_date}}
+
+    {% if user.is_authenticated %} 
+        {% if user.id == post.author.id %}
+        <small><a href="{% url 'blog:update-post' post.pk %}" ><button type="button" class="btn btn-success btn-sm">Edit</button></a></small>
+                <small><a href="{% url 'blog:delete-post' post.pk %}" ><button type="button" class="btn btn-danger btn-sm">Delete</button></a></small>
+        {% endif %}
+    {% endif %}
+
+    <br>
+<hr>
+<br>
+
+{% if post.header_image %}
+    <center><img src="{{post.header_image.url}}"></center>
+{% endif %}
+<br>
+{{ post.body | safe }}
+
+<br><br>
+
+<div class="card mb-3">
+    <div class="row g-0">
+    <div class="col-md-2">
+        {% if post.author.profile.profile_pic %}
+        <img src="{{post.author.profile.profile_pic.url}}" width="150" height="150">
+        {% else %}
+        <img src="{% static 'blog/images/avatar.png' %}" width="150" height="150">
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <div class="card-body">
+        <h5 class="card-title">{{ post.author.first_name}} {{ post.author.last_name}}</h5>
+        <p class="card-text"><small class="small text-muted"><a href="{% url 'members:show-profile-page' post.author.profile.id%}">Profile Page</a> | Author</small></p>
+        {% if post.author.profile.bio %}
+        <p class="card-text">{{post.author.profile.bio}}</p>
+        {% else %}
+        <p class="card-text">This is {{ post.author.first_name}}'s bio</p>
+        {% endif %}
+        </div>
+    </div>
+    </div>
+</div>
+<br>
+
+
+<h3>Comments</h3>
+<br>
+{% if not post.comments.all %}
+    No Comments Yet... 
+{% else %}
+    {% for comment in post.comments.all %}
+        <strong>{{ comment.name }} - {{comment.date_added}}</strong><br>
+        {{comment.body | safe }}  
+        
+        {% if user.id == post.author.id %}
+        - <small><a href="{% url 'blog:delete-comment' comment.pk%}" >(Delete)</a></small>
+        {% endif %}
+        
+        <br><br> 
+
+      
+
+    {% endfor %}    
+
+{% endif %}
+<br><br>
+<a href="{% url 'blog:add-comment' post.pk %}">Add Comment</a>
+<hr>
+<br><br>
+</div>
+{% endblock %}

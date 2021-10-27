@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Delete Comment{% endblock %}
+{% block content %}
+<div class="container">
+    <br><br>
+{% if user.is_authenticated %}
+    
+        <h1>Delete Comment</h1>
+        <br><br>
+        <h5>Delete: {{comment.body | safe}}</h5> 
+        <br>
+        <form method="POST">
+            {% csrf_token %}
+            
+            <strong>Are you sure?</strong><br><br>
+            <button type="submit" class="btn btn-danger">Delete</button>
+    
+
+{% else %}
+    <p>You're not allowed here</p>
+{% endif %}
+</div>
+{% endblock %}

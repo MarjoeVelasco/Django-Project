@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% load static %}
+{% block content %}
+
+<style>
+
+
+</style>
+
+<div class="">
+    <div class="">
+      <div style="position: relative;" class="">
+         
+      <img class="col-12" height="50%" src="{% static 'blog/images/header_imgv1.png' %}">
+      </div>
+    </div>
+</div>
+    <hr>
+<div class="container">
+<h1>Recent Posts</h1>
+
+
+{% for post in object_list %}
+
+<div class="row">
+    <div class="col-md-2"><a href="{% url 'blog:article-detail' post.pk %}"><img class="col-12" src="{{post.thumbnail.url}}"></a></div>
+    <div class="col-md-10">
+
+        <h2><a class="text-decoration-none" href="{% url 'blog:article-detail' post.pk %}">{{ post.title }}</a> </h2>
+        
+        <a class="badge alert-warning" href="{% url 'blog:category' post.category%}">{{post.category}}</a> 
+          {{ post.post_date}} 
+        
+        <br>
+        By: {{ post.author.first_name}} {{ post.author.last_name}}
+        <p style="text-align: justify;">{{ post.body | slice:":400" | safe  }}</p>
+        {% if user.is_authenticated %}
+            {% if user.id == post.author.id %}
+                <small><a href="{% url 'blog:update-post' post.pk %}" ><button type="button" class="btn btn-success btn-sm">Edit</button></a></small>
+                <small><a href="{% url 'blog:delete-post' post.pk %}" ><button type="button" class="btn btn-danger btn-sm">Delete</button></a></small>
+            {% endif %}       
+        {% endif %}
+
+
+    </div>
+  </div>
+
+  <br>
+
+   
+
+
+
+    
+{% endfor %}
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page=1" >&laquo; first</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+      {% endif %}
+
+      <li class="page-item"><span class="current page-link">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span></li>
+   
+
+      {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}" >Next</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" >last &raquo;</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+</div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-center text-white">
+        <!-- Grid container -->
+        <div class="container p-4">
+          <!-- Section: Social media -->
+      
+      
+      
+          <!-- Section: Text -->
+          <section class="mb-4">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget sit amet tellus cras adipiscing enim eu turpis. Et molestie ac feugiat sed lectus vestibulum mattis ullamcorper. Fermentum odio eu feugiat pretium nibh ipsum consequat nisl vel. Blandit cursus risus at ultrices mi. Natoque penatibus et magnis dis parturient montes nascetur ridiculus mus. Lectus vestibulum mattis ullamcorper velit sed. Fermentum dui faucibus in ornare. Sed viverra tellus in hac habitasse platea. Rhoncus urna neque viverra justo.
+            </p>
+          </section>
+          <!-- Section: Text -->
+      
+      
+          <!-- Section: Links -->
+        </div>
+        <!-- Grid container -->
+      
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+          © 2021 All Rights Reserve
+         
+        </div>
+        <!-- Copyright -->
+      </footer>
+      <!-- Footer -->
+{% endblock %}
